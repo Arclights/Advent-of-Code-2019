@@ -3,58 +3,75 @@ import Test.HUnit
 import Data.List.Split
 import Day2
 
-test1 :: Test
-test1 = TestCase(do
+p1ex1 :: Test
+p1ex1 = TestCase(do
                   let input = [1,9,10,3,2,3,11,0,99,30,40,50]
-                  let result = part1 input
+                  let result = calculate input
                   assertEqual "" 3500 result
                   ) 
 
-test2 :: Test
-test2 = TestCase(do
+p1ex2 :: Test
+p1ex2 = TestCase(do
                   let input = [1,0,0,0,99]
-                  let result = part1 input
+                  let result = calculate input
                   assertEqual "" 2 result
                   ) 
 
-test3 :: Test
-test3 = TestCase(do
+p1ex3 :: Test
+p1ex3 = TestCase(do
                   let input = [2,3,0,3,99]
-                  let result = part1 input
+                  let result = calculate input
                   assertEqual "" 2 result
                   ) 
                   
-test4 :: Test
-test4 = TestCase(do
+p1ex4 :: Test
+p1ex4 = TestCase(do
                   let input = [2,4,4,5,99,0]
-                  let result = part1 input
+                  let result = calculate input
                   assertEqual "" 2 result
                   ) 
 
-test5 :: Test
-test5 = TestCase(do
+p1ex5 :: Test
+p1ex5 = TestCase(do
                   let input = [1,1,1,4,99,5,6,0,99]
-                  let result = part1 input
+                  let result = calculate input
                   assertEqual "" 30 result
                   )
 
-prep :: [Int] -> [Int]
-prep state = replace (replace state 2 2) 1 12
+readData :: String -> IO [Int]
+readData path = do
+                  list <- readFile path
+                  return $ map (\x -> read x :: Int) (splitOn "," list)
 
-test6 :: Test
-test6 = TestCase ( do
-                    list <- readFile "test/day2_part1.txt"
-                    let input = map (\x -> read x :: Int) (splitOn "," list)
-                    let result = part1 $ prep input
-                    assertEqual "" 4930687 result
-                    )
+p1 :: Test
+p1 = TestCase ( do
+                  input <- readData "test/day2_part1.txt"
+                  let result = part1 input
+                  assertEqual "" 4930687 result
+                  )
                     
-
+p2ex1 :: Test
+p2ex1 = TestCase(do
+                  let input1 = 4930687
+                  input2 <- readData "test/day2_part1.txt"
+                  let result = part2 input1 input2
+                  assertEqual "" 1202 result
+                  )
+                  
+p2 :: Test
+p2 = TestCase(do
+                let input1 = 19690720
+                input2 <- readData "test/day2_part1.txt"
+                let result = part2 input1 input2
+                assertEqual "" 5335 result
+                )
 
 day2Tests :: Test
-day2Tests = test [ TestLabel "Test1" test1, 
-                   TestLabel "Test2" test2, 
-                   TestLabel "Test3" test3, 
-                   TestLabel "Test4" test4, 
-                   TestLabel "Test5" test5,
-                   TestLabel "Test6" test6 ]
+day2Tests = test [ TestLabel "Part1 Example1" p1ex1, 
+                   TestLabel "Part1 Example2" p1ex2, 
+                   TestLabel "Part1 Example3" p1ex3, 
+                   TestLabel "Part1 Example4" p1ex4, 
+                   TestLabel "Part1 Example5" p1ex5,
+                   TestLabel "Part1 Input" p1,
+                   TestLabel "Part2 Example1" p2ex1,
+                   TestLabel "Part2 Input" p2 ]
