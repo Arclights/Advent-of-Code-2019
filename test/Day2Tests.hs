@@ -2,6 +2,7 @@ module Day2Tests where
 import Test.HUnit
 import Data.List.Split
 import Day2
+import IntComputer
 
 p1ex1 :: Test
 p1ex1 = TestCase(do
