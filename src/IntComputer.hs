@@ -19,6 +19,10 @@ compute pointer input output state
  | opCode == 2 = multiply pointer input output state param1 param1Mode param2 param2Mode param3
  | opCode == 3 = store pointer input output state param1
  | opCode == 4 = sendToOutput pointer input output state param1 param1Mode
+ | opCode == 5 = jumpIfTrue pointer input output state param1 param1Mode param2 param2Mode
+ | opCode == 6 = jumpIfFalse pointer input output state param1 param1Mode param2 param2Mode
+ | opCode == 7 = lessThan pointer input output state param1 param1Mode param2 param2Mode param3
+ | opCode == 8 = equals pointer input output state param1 param1Mode param2 param2Mode param3
  | opCode == 99 = (state, output) 
  | otherwise = error $ "Unknown opCode: " ++ (show opCode)
  where instruction = state!!pointer
@@ -53,7 +57,40 @@ sendToOutput pointer input output state param1 param1Mode = compute updatedPoint
   where input1 = parseParameter state param1 param1Mode
         updatedOutput = (input1:output)
         updatedPointer = pointer + 2
-
+ 
+jumpIfTrue :: Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> Int -> Int -> ([Int], [Int])
+jumpIfTrue pointer input output state param1 param1Mode param2 param2Mode = compute updatedPointer input output state
+ where input1 = parseParameter state param1 param1Mode
+       input2 = parseParameter state param2 param2Mode
+       updatedPointer
+         | input1 /= 0 = input2
+         | otherwise = pointer + 3
+        
+jumpIfFalse :: Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> Int -> Int -> ([Int], [Int])
+jumpIfFalse pointer input output state param1 param1Mode param2 param2Mode = compute updatedPointer input output state
+  where input1 = parseParameter state param1 param1Mode
+        input2 = parseParameter state param2 param2Mode
+        updatedPointer
+          | input1 == 0 = input2
+          | otherwise = pointer + 3
+          
+lessThan :: Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> Int -> Int -> Int -> ([Int], [Int])
+lessThan pointer input output state param1 param1Mode param2 param2Mode param3 = compute updatedPointer input output updatedState
+  where input1 = parseParameter state param1 param1Mode
+        input2 = parseParameter state param2 param2Mode
+        updatedState
+          | input1 < input2 = replace state param3 1
+          | otherwise = replace state param3 0
+        updatedPointer = pointer + 4
+        
+equals :: Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> Int -> Int -> Int -> ([Int], [Int])
+equals pointer input output state param1 param1Mode param2 param2Mode param3 = compute updatedPointer input output updatedState
+  where input1 = parseParameter state param1 param1Mode
+        input2 = parseParameter state param2 param2Mode
+        updatedState
+          | input1 == input2 = replace state param3 1
+          | otherwise = replace state param3 0
+        updatedPointer = pointer + 4
     
 parseParameter :: [Int] -> Int -> Int -> Int
 parseParameter state param 0 = state !! param

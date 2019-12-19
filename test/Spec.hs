@@ -10,7 +10,7 @@ tests :: Test
 tests = TestList [  day1Tests,
                     day2Tests,
                     day5Tests,
-                    day7Tests 
+                    day7Tests
                  ]
 
 main :: IO Counts
