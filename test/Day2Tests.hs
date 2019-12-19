@@ -68,11 +68,12 @@ p2 = TestCase(do
                 )
 
 day2Tests :: Test
-day2Tests = test [ TestLabel "Part1 Example1" p1ex1, 
-                   TestLabel "Part1 Example2" p1ex2, 
-                   TestLabel "Part1 Example3" p1ex3, 
-                   TestLabel "Part1 Example4" p1ex4, 
+day2Tests = test [ TestLabel "Part1 Example1" p1ex1,
+                   TestLabel "Part1 Example2" p1ex2,
+                   TestLabel "Part1 Example3" p1ex3,
+                   TestLabel "Part1 Example4" p1ex4,
                    TestLabel "Part1 Example5" p1ex5,
                    TestLabel "Part1 Input" p1,
                    TestLabel "Part2 Example1" p2ex1,
-                   TestLabel "Part2 Input" p2 ]
+                   TestLabel "Part2 Input" p2
+                   ]

@@ -7,10 +7,11 @@ import Day5Tests
 import Day7Tests
 
 tests :: Test
-tests = TestList [  --day1Tests,
+tests = TestList [  day1Tests,
                     day2Tests,
-                    day5Tests ]
---                     day7Tests ]
+                    day5Tests,
+                    day7Tests 
+                 ]
 
 main :: IO Counts
 main = runTestTT tests

@@ -47,7 +47,7 @@ p2 :: Test
 p2 = TestCase ( do
                   input <- readData "test/day1_part1.txt"
                   let result = part2 input
-                  assertEqual "" 0 result
+                  assertEqual "" 5337642 result
                   )
                   
 day1Tests :: Test

@@ -25,9 +25,9 @@ p1ex2 = TestCase(do
 
 p1 :: Test
 p1 = TestCase ( do
-                  input <- readData "test/day1_part1.txt"
+                  input <- readData "test/day5.txt"
                   let result = part1 [1] input
-                  assertEqual "" (0, []) result
+                  assertEqual "" (3, [5577461,0,0,0,0,0,0,0,0,0]) result
                   )
 
 day5Tests :: Test

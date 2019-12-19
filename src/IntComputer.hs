@@ -1,6 +1,7 @@
 module IntComputer(calculate, prep, testNouns) where
 
 import Data.Maybe
+import Debug.Trace
 
 prep :: [Int] -> Int -> Int -> [Int]
 prep state noun verb = replace (replace state 2 verb) 1 noun
@@ -10,35 +11,49 @@ calculate input program = (state !! 0, output)
   where (state, output) = computeState input program
 
 computeState :: [Int] -> [Int] -> ([Int], [Int])
-computeState input state = compute 0 input state
+computeState input state = compute 0 input [] state
 
-compute :: Int -> [Int] -> [Int] -> ([Int], [Int])
-compute pointer input state
- | opCode == 1 = add pointer input state param1 param1Mode param2 param2Mode param3
- | opCode == 2 = add pointer input state param1 param1Mode param2 param2Mode param3
- | opCode == 99 = (state, []) 
+compute :: Int -> [Int] -> [Int] -> [Int] -> ([Int], [Int])
+compute pointer input output state
+ | opCode == 1 = add pointer input output state param1 param1Mode param2 param2Mode param3
+ | opCode == 2 = multiply pointer input output state param1 param1Mode param2 param2Mode param3
+ | opCode == 3 = store pointer input output state param1
+ | opCode == 4 = sendToOutput pointer input output state param1 param1Mode
+ | opCode == 99 = (state, output) 
  | otherwise = error $ "Unknown opCode: " ++ (show opCode)
  where instruction = state!!pointer
        param1 = state!!(pointer + 1)
        param2 = state!!(pointer + 2)
        param3 = state!!(pointer + 3)
        (opCode, param1Mode, param2Mode, param3Mode) = parseInstruction $ state!!pointer
-       
-add :: Int -> [Int] -> [Int] -> Int -> Int -> Int -> Int -> Int -> ([Int], [Int])
-add pointer input state param1 param1Mode param2 param2Mode param3 = compute updatedPointer input updatedState
+
+add :: Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> Int -> Int -> Int -> ([Int], [Int])
+add pointer input output state param1 param1Mode param2 param2Mode param3 = compute updatedPointer input output updatedState
   where input1 = parseParameter state param1 param1Mode
         input2 = parseParameter state param2 param2Mode
         result = input1 + input2
         updatedState = replace state param3 result
         updatedPointer = pointer + 4
         
-multiply :: Int -> [Int] -> [Int] -> Int -> Int -> Int -> Int -> Int -> ([Int], [Int])
-multiply pointer input state param1 param1Mode param2 param2Mode param3 = compute updatedPointer input updatedState
+multiply :: Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> Int -> Int -> Int -> ([Int], [Int])
+multiply pointer input output state param1 param1Mode param2 param2Mode param3 = compute updatedPointer input output updatedState
   where input1 = parseParameter state param1 param1Mode
         input2 = parseParameter state param2 param2Mode
         result = input1 * input2
         updatedState = replace state param3 result
         updatedPointer = pointer + 4
+        
+store :: Int -> [Int] -> [Int] -> [Int] -> Int -> ([Int], [Int])
+store pointer (input:is) output state param1 = compute updatedPointer is output updatedState
+ where updatedState = replace state param1 input
+       updatedPointer = pointer + 2
+       
+sendToOutput :: Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> ([Int], [Int])
+sendToOutput pointer input output state param1 param1Mode = compute updatedPointer input updatedOutput state
+  where input1 = parseParameter state param1 param1Mode
+        updatedOutput = (input1:output)
+        updatedPointer = pointer + 2
+
     
 parseParameter :: [Int] -> Int -> Int -> Int
 parseParameter state param 0 = state !! param
