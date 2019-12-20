@@ -167,7 +167,8 @@ p2 = TestCase ( do
                   )         
 
 day5Tests :: Test
-day5Tests = test [ TestLabel "Part1 Example1" p1ex1,
+day5Tests = test [ 
+                   TestLabel "Part1 Example1" p1ex1,
                    TestLabel "Part1 Input" p1,
                    TestLabel "Part2 Example1" p2ex1,
                    TestLabel "Part2 Example2" p2ex2,

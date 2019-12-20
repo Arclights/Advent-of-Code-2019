@@ -5,12 +5,15 @@ import Day1Tests
 import Day2Tests
 import Day5Tests
 import Day7Tests
+import Day9Tests
 
 tests :: Test
-tests = TestList [  day1Tests,
+tests = TestList [ 
+                    day1Tests,
                     day2Tests,
                     day5Tests,
-                    day7Tests
+                    day7Tests,
+                    day9Tests
                  ]
 
 main :: IO Counts
