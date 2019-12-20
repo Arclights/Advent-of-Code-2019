@@ -41,7 +41,7 @@ p2 :: Test
 p2 = TestCase ( do
                   input <- readData "test/day9.txt"
                   let result = snd $ calculate [2] input
-                  assertEqual "" [] result
+                  assertEqual "" [76791] result
                   )
 
 day9Tests :: Test
