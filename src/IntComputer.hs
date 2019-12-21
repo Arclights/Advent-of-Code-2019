@@ -48,19 +48,19 @@ multiply pointer relativeBase input output state param1 param1Mode param2 param2
         result = input1 * input2
         updatedState = replace state input3 result
         updatedPointer = pointer + 4
-        
+
 store :: Int -> Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> ([Int], [Int])
 store pointer relativeBase (input:is) output state param1 param1Mode = compute updatedPointer relativeBase is output updatedState
  where input1 = parseWriteParameter state relativeBase param1 param1Mode
        updatedState = replace state input1 input
        updatedPointer = pointer + 2
-       
+
 sendToOutput :: Int -> Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> ([Int], [Int])
 sendToOutput pointer relativeBase input output state param1 param1Mode = compute updatedPointer relativeBase input updatedOutput state
   where input1 = parseParameter state relativeBase param1 param1Mode
         updatedOutput = (input1:output)
         updatedPointer = pointer + 2
- 
+
 jumpIfTrue :: Int -> Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> Int -> Int -> ([Int], [Int])
 jumpIfTrue pointer relativeBase input output state param1 param1Mode param2 param2Mode = compute updatedPointer relativeBase input output state
  where input1 = parseParameter state relativeBase param1 param1Mode
@@ -68,7 +68,7 @@ jumpIfTrue pointer relativeBase input output state param1 param1Mode param2 para
        updatedPointer
          | input1 /= 0 = input2
          | otherwise = pointer + 3
-        
+
 jumpIfFalse :: Int -> Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> Int -> Int -> ([Int], [Int])
 jumpIfFalse pointer relativeBase input output state param1 param1Mode param2 param2Mode = compute updatedPointer relativeBase input output state
   where input1 = parseParameter state relativeBase param1 param1Mode
@@ -76,7 +76,7 @@ jumpIfFalse pointer relativeBase input output state param1 param1Mode param2 par
         updatedPointer
           | input1 == 0 = input2
           | otherwise = pointer + 3
-          
+
 lessThan :: Int -> Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> Int -> Int -> Int -> Int -> ([Int], [Int])
 lessThan pointer relativeBase input output state param1 param1Mode param2 param2Mode param3 param3Mode = compute updatedPointer relativeBase input output updatedState
   where input1 = parseParameter state relativeBase param1 param1Mode
@@ -86,7 +86,7 @@ lessThan pointer relativeBase input output state param1 param1Mode param2 param2
           | input1 < input2 = replace state input3 1
           | otherwise = replace state input3 0
         updatedPointer = pointer + 4
-        
+
 equals :: Int -> Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> Int -> Int -> Int -> Int -> ([Int], [Int])
 equals pointer relativeBase input output state param1 param1Mode param2 param2Mode param3 param3Mode = compute updatedPointer relativeBase input output updatedState
   where input1 = parseParameter state relativeBase param1 param1Mode
@@ -96,13 +96,13 @@ equals pointer relativeBase input output state param1 param1Mode param2 param2Mo
           | input1 == input2 = replace state input3 1
           | otherwise = replace state input3 0
         updatedPointer = pointer + 4
-        
+
 adjustRelativeBase :: Int -> Int -> [Int] -> [Int] -> [Int] -> Int -> Int -> ([Int], [Int])
 adjustRelativeBase pointer relativeBase input output state param1 param1Mode = compute updatedPointer updatedRelativeBase input output state
   where input1 = parseParameter state relativeBase param1 param1Mode
         updatedRelativeBase = relativeBase + input1
         updatedPointer = pointer + 2
-    
+
 parseParameter :: [Int] -> Int -> Int -> Int -> Int
 parseParameter state relativeBase param 0 = state !! param
 parseParameter state relativeBase param 1 = param
